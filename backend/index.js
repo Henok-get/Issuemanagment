@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGODB).then(()=>{
 app.use(express.json());
 
 
-app.use('/auth',auth)
+app.use('/api/auth',auth)
 
 
 app.use(cookieParser());

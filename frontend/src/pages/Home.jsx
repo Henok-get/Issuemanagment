@@ -1,8 +1,42 @@
-import React from 'react'
-
+import { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
 
 export default function Home() {
-    
+  
+  const [formData,setFormData]=useState({})
+const navigate=useNavigate();
+
+  const Handlechange=(e)=>{
+setFormData({...formData,[e.target.id]: e.target.value})
+
+  }
+const Handlesubmit=async(e)=>{
+
+  e.preventDefault();
+  try{
+const res=fetch('/api/auth/signin', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formData),
+});
+
+const data=await res.json()
+if (data.success === false) {
+ console.log('error')
+  return;
+}
+navigate('/Test');
+
+  }catch(err){
+    console.log(err)
+  }
+
+}
+
+
+
     return (
       <>
     
@@ -15,7 +49,7 @@ export default function Home() {
           </div>
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form  className="space-y-6 gap-3 ">
+            <form  className="space-y-6 gap-3 " onSubmit={Handlesubmit}>
               <div>
                 <label  className="block text-sm font-medium leading-6 text-gray-900">
                   Email address
@@ -24,7 +58,7 @@ export default function Home() {
                   <input 
                     id="email"
                     placeholder='cbe_email@cbe.com.et'
-          
+          onChange={Handlechange}
                     type="email"
                     required
                     autoComplete="email"
@@ -43,6 +77,7 @@ export default function Home() {
                 <div className="mt-2">
                   <input
                     id="password"
+                    onChange={Handlechange}
                   placeholder='**************'
                     type="password"
                     required
